@@ -1,29 +1,32 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 var url = require('url');
 var request = require('request');
 
 var format = ".json";
-var apikey = process.env.WU_ACCESS  //WU API key; will be set in Heroku
+var apikey = process.env.WU_ACCESS  //WU API key for heroku configuration
 
-var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//use port is set in the environment variable, or 9001 if it isn’t set.
-app.set('port', (process.env.PORT || 9001));
+//Port is now set to 9001
+var port = process.env.PORT || 9001;
+//app.set('port', (process.env.PORT || 9001));
 
-//for testing that the app is running
+//Just to confirm app is running
 app.get('/', function(req, res){
-  res.send('Running!!');
+  res.send('Hello Everyone!!');
 });
 
-//app.post is triggered when a POST request is sent to the URL ‘/post’
+//app.post will be triggered when a POST request is sent to the URL ‘/post’
 app.post('/post', function(req, res){
-  //take a message from Slack slash command
-  var query = req.body.text
+  
+//Get message from slash command
+var query = req.body.text
 
-  var parsed_url = url.format({
+//Get weather elements from Weather API using weather underground API e.g http://api.wunderground.com/api/dc4bfe7a43a22962/conditions/q/CA/San_Jose.json
+var parsed_url = url.format({
     pathname: 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + req.body.text + format,
   });
 
@@ -31,19 +34,16 @@ app.post('/post', function(req, res){
   request(parsed_url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
-      var temperature = data.current_observation.temperature_string;
+      var temp = data.current_observation.temperature_string;
       var weatherCondition = data.current_observation.weather
-      var icon_url = data.current_observation.icon_url
-      var location = data.current_observation.display_location.full
-
+      var icon = data.current_observation.icon_url
+      var city = data.current_observation.display_location.full
       var body = {
         response_type: "in_channel",
         "attachments": [
           {
-            "text": "Location: " + location + "\n"
-                  + "Temperature: " + temperature + "\n"
-                  + "Condition: " + weatherCondition,
-            "image_url": icon_url,
+            "text": "City Name: " + city + "\n" + "Temperature: " + temp + "\n" + "Condition: " + weatherCondition,
+            "image_url": icon
           }
         ]
       };
@@ -52,7 +52,7 @@ app.post('/post', function(req, res){
   });
 });
 
-//tells Node which port to listen on
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+//Informs application which port to listen on
+app.listen(port, function() {
+  console.log('Weather app is running on port', + port);
 });
