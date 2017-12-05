@@ -15,6 +15,7 @@ Usage:
 Procfile: You can use Procfile to declare what commands can be run by your application's dynos on the Heroku platform. In this case, we will add "web: node index.js", which means Heroku will look for the index.js file to initiate the app.
 
 package.json: It will contain all the meta data and dependencies associated with the app. We can use npm install to install all these dependecies.
+
 npm install -g express
 npm install body-parser
 npm install ejs --save
@@ -41,6 +42,8 @@ git push heroku master
 heroku open
 
 Now add the Weather Underground API key under WU_ACCESS: heroku config:add WU_ACCESS=[your API key]
+
+Now go to slack and make sure to add slash command from the custom integration page.
 
 
 
