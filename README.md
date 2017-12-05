@@ -21,11 +21,13 @@ You can use Procfile to declare what commands can be run by your application's d
 
 It will contain all the meta data and dependencies associated with the app. We can use npm install to install all these dependecies.
 
+```
 npm install -g express
 
 npm install body-parser
 
 npm install ejs --save
+```
 
 ### index.js: 
 
@@ -38,14 +40,17 @@ Now open terminal and run index.js file. Use node index.js command for that.
 Visit the port & make sure app is running fine.
 After closing the port make sure to use to commands to confirm port is closed.
 
+```
 sudo lsof -i tcp:PORT_NUMBER
 
 Kill -9 PID_NUMBER
+```
 
 ## Code Deployment to Heroku:
 
 Use following commands:
 
+```
 brew install heroku-toolbelt
 
 heroku login
@@ -59,6 +64,7 @@ git commit -m "Code Fix"
 git push heroku master
 
 heroku open
+```
 
 Now add the Weather Underground API key under WU_ACCESS: heroku config:add WU_ACCESS=[your API key]
 
