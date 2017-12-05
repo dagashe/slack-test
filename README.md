@@ -40,4 +40,5 @@ git commit -m "Code Fix"
 git push heroku master
 heroku open
 
+Now add the Weather Underground API key under WU_ACCESS: heroku config:add WU_ACCESS=[your API key]
 
